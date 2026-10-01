@@ -180,12 +180,20 @@
                 </div>
             </div>
 
-            <!-- Admin Actions -->
+            <!-- Admin Actions: intentionally subtle for regular visitors -->
             <div class="flex items-center space-x-3">
-                <button onclick="toggleAdminMode()" id="admin-toggle-btn" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-sm transition-all">
-                    <i class="fa-solid fa-lock text-slate-400" id="admin-lock-icon"></i>
-                    <span id="admin-toggle-text">進入後台管理</span>
-                </button>
+                <div class="relative group">
+                    <button onclick="toggleAdminMode()" id="admin-toggle-btn"
+                        aria-label="管理員登入"
+                        class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:text-slate-500 hover:bg-slate-50 transition-all duration-200">
+                        <i class="fa-solid fa-lock text-xs" id="admin-lock-icon"></i>
+                        <span id="admin-toggle-text" class="sr-only">進入後台管理</span>
+                    </button>
+                    <span id="admin-tooltip"
+                        class="pointer-events-none absolute right-0 top-full mt-2 whitespace-nowrap rounded-md bg-slate-800 px-2.5 py-1.5 text-xs text-white opacity-0 invisible translate-y-[-2px] group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-150 shadow-lg z-50">
+                        管理員登入
+                    </span>
+                </div>
             </div>
         </div>
     </header>
@@ -850,6 +858,7 @@
             const lockIcon = document.getElementById('admin-lock-icon');
             const toggleText = document.getElementById('admin-toggle-text');
             const toggleBtn = document.getElementById('admin-toggle-btn');
+            const adminTooltip = document.getElementById('admin-tooltip');
             const productAddBtn = document.getElementById('admin-product-add-btn-wrapper');
             const teamAddBtn = document.getElementById('admin-team-add-btn-wrapper');
             const flexibleAddBtn = document.getElementById('admin-flexible-add-btn-wrapper');
@@ -857,18 +866,22 @@
             if (isAdmin) {
                 panel.classList.remove('hidden');
                 panel.classList.add('flex');
-                lockIcon.className = "fa-solid fa-unlock text-emerald-400";
-                toggleText.innerText = "登出後台";
-                toggleBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 shadow-sm transition-all";
+                lockIcon.className = "fa-solid fa-unlock text-emerald-500 text-xs";
+                toggleText.innerText = "🔓 後台";
+                toggleBtn.setAttribute('aria-label', '🔓 後台（點擊登出）');
+                toggleBtn.className = "h-8 px-2.5 flex items-center justify-center rounded-lg text-xs font-medium border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition-all";
+                if (adminTooltip) adminTooltip.innerText = "登出後台";
                 if (productAddBtn) productAddBtn.classList.remove('hidden');
                 if (teamAddBtn) teamAddBtn.classList.remove('hidden');
                 if (flexibleAddBtn) flexibleAddBtn.classList.remove('hidden');
             } else {
                 panel.classList.remove('flex');
                 panel.classList.add('hidden');
-                lockIcon.className = "fa-solid fa-lock text-slate-400";
+                lockIcon.className = "fa-solid fa-lock text-slate-300 text-xs";
                 toggleText.innerText = "進入後台管理";
-                toggleBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 shadow-sm transition-all";
+                toggleBtn.setAttribute('aria-label', '管理員登入');
+                toggleBtn.className = "w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:text-slate-500 hover:bg-slate-50 transition-all duration-200";
+                if (adminTooltip) adminTooltip.innerText = "管理員登入";
                 if (productAddBtn) productAddBtn.classList.add('hidden');
                 if (teamAddBtn) teamAddBtn.classList.add('hidden');
                 if (flexibleAddBtn) flexibleAddBtn.classList.add('hidden');
